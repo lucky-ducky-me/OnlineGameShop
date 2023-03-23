@@ -3,7 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OnlineGameShopApi", "OnlineGameShopApi\OnlineGameShopApi\OnlineGameShopApi.csproj", "{49BAB3D1-C2DE-4BDD-9286-1545B8642A17}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OnlineGameShopApi", "OnlineGameShopApi\OnlineGameShopApi\OnlineGameShopApi.csproj", "{49BAB3D1-C2DE-4BDD-9286-1545B8642A17}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataBaseProvider", "DataBaseProvider\DataBaseProvider.csproj", "{DEE8844A-CDDB-4F10-A78D-B58B5B8B2B2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{49BAB3D1-C2DE-4BDD-9286-1545B8642A17}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{49BAB3D1-C2DE-4BDD-9286-1545B8642A17}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{49BAB3D1-C2DE-4BDD-9286-1545B8642A17}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEE8844A-CDDB-4F10-A78D-B58B5B8B2B2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEE8844A-CDDB-4F10-A78D-B58B5B8B2B2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEE8844A-CDDB-4F10-A78D-B58B5B8B2B2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEE8844A-CDDB-4F10-A78D-B58B5B8B2B2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
