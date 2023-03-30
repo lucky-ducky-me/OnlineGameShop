@@ -16,7 +16,7 @@ namespace OnlineGameShopApi.Controllers
 
         //todo изменинть на класс модели, а не на класс сущности бд
         [HttpGet("games")]
-        public ActionResult<IEnumerable<DataBaseProvider.Models.Game>> Games()
+        public ActionResult<IEnumerable<DataBaseProvider.Models.Game>> GetGames()
         {
             try
             {
@@ -29,7 +29,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpGet("games/{id}")]
-        public ActionResult<DataBaseProvider.Models.Game> Game(Guid id)
+        public ActionResult<DataBaseProvider.Models.Game> GetGame(Guid id)
         {
             try
             {
