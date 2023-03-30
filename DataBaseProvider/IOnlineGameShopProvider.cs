@@ -28,5 +28,15 @@ namespace DataBaseProvider
         public Order GetOrder(Guid id);
 
         public UserScore GetUserScore(Guid id);
+
+        public Task<Tuple<bool, Guid>> AddUser(User user);
+
+        public Task<Tuple<bool, Guid>> AddGenre(Genre genre);
+
+        public Task<Tuple<bool, Guid>> AddGame(Game game);
+
+        public Task<Tuple<bool, Guid>> AddOrder(Order order);
+
+        public Task<Tuple<bool, Guid>> AddUserScore(UserScore score);
     }
 }
