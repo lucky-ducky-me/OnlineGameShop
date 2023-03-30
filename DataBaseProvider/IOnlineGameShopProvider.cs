@@ -18,5 +18,15 @@ namespace DataBaseProvider
         public IEnumerable<Order> GetAllOrders();
 
         public IEnumerable<UserScore> GetAllUsersScore();
+
+        public User GetUser(Guid id);
+
+        public Genre GetGenre(Guid id);
+
+        public Game GetGame(Guid id);   
+
+        public Order GetOrder(Guid id);
+
+        public UserScore GetUserScore(Guid id);
     }
 }
