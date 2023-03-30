@@ -29,14 +29,20 @@ namespace DataBaseProvider
 
         public UserScore GetUserScore(Guid id);
 
-        public Task<Tuple<bool, Guid>> AddUser(User user);
+        public bool AddUser(User user);
 
-        public Task<Tuple<bool, Guid>> AddGenre(Genre genre);
+        public bool AddGame(Game game);
 
-        public Task<Tuple<bool, Guid>> AddGame(Game game);
+        public bool AddOrder(Order order);
 
-        public Task<Tuple<bool, Guid>> AddOrder(Order order);
+        public bool AddUserScore(UserScore score);
 
-        public Task<Tuple<bool, Guid>> AddUserScore(UserScore score);
+        public bool DeleteUser(User user);
+
+        public bool DeleteGame(Game game);
+
+        public bool DeleteOrder(Order order);
+
+        public bool DeleteUserScore(UserScore score);
     }
 }
