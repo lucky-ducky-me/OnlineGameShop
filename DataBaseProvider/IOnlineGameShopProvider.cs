@@ -37,12 +37,12 @@ namespace DataBaseProvider
 
         public bool AddUserScore(UserScore score);
 
-        public bool DeleteUser(User user);
+        public bool DeleteUser(Guid id);
 
-        public bool DeleteGame(Game game);
+        public bool DeleteGame(Guid id);
 
-        public bool DeleteOrder(Order order);
+        public bool DeleteOrder(Guid id);
 
-        public bool DeleteUserScore(UserScore score);
+        public bool DeleteUserScore(Guid id);
     }
 }

@@ -124,24 +124,24 @@ namespace DataBaseProvider
             throw new NotImplementedException();
         }
 
-        public bool DeleteUser(User user)
+        public bool DeleteUser(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteGame(Game game)
+        public bool DeleteGame(Guid id)
         {
-            _dbContext.Games.Remove(game);
+            _dbContext.Games.Remove(new Game() { Id = id});
 
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool DeleteOrder(Order order)
+        public bool DeleteOrder(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        public bool DeleteUserScore(UserScore score)
+        public bool DeleteUserScore(Guid id)
         {
             throw new NotImplementedException();
         }

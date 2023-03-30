@@ -59,9 +59,9 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpDelete("games")]
-        public ActionResult<DataBaseProvider.Models.Game> DeleteGame(DataBaseProvider.Models.Game game)
+        public ActionResult<DataBaseProvider.Models.Game> DeleteGame(Guid id)
         {
-            var result = _onlineGameShopProvider.DeleteGame(game);
+            var result = _onlineGameShopProvider.DeleteGame(id);
 
             if (result)
             {
