@@ -44,17 +44,17 @@ namespace DataBaseProvider
             throw new NotImplementedException();
         }
 
-        User IOnlineGameShopProvider.GetUser(Guid id)
+        public User GetUser(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Genre IOnlineGameShopProvider.GetGenre(Guid id)
+        public Genre GetGenre(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        Game IOnlineGameShopProvider.GetGame(Guid id)
+        public Game GetGame(Guid id)
         {
             var games = _dbContext.Games;
            
@@ -73,12 +73,56 @@ namespace DataBaseProvider
             return game;
         }
 
-        Order IOnlineGameShopProvider.GetOrder(Guid id)
+        public Order GetOrder(Guid id)
         {
             throw new NotImplementedException();
         }
 
-        UserScore IOnlineGameShopProvider.GetUserScore(Guid id)
+        public UserScore GetUserScore(Guid id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddGame(Game game)
+        {
+            _dbContext.Games.Add(game);
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool AddOrder(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool AddUserScore(UserScore score)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteUser(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteGame(Game game)
+        {
+            _dbContext.Games.Remove(game);
+
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool DeleteOrder(Order order)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool DeleteUserScore(UserScore score)
         {
             throw new NotImplementedException();
         }
