@@ -6,8 +6,16 @@ namespace DataBaseProvider.Models;
 
 public partial class OnlineGameShopContext : DbContext
 {
+
+    private string ConnectionString { get; set; }
+
     public OnlineGameShopContext()
     {
+    }
+
+    public OnlineGameShopContext(string connectionString)
+    {
+        ConnectionString = connectionString;
     }
 
     public OnlineGameShopContext(DbContextOptions<OnlineGameShopContext> options)
@@ -26,8 +34,7 @@ public partial class OnlineGameShopContext : DbContext
     public virtual DbSet<UserScore> UserScores { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-//#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
-        => optionsBuilder.UseSqlServer("Server=DESKTOP-N04FOJI;Database=OnlineGameShop;Trusted_Connection=True;TrustServerCertificate=true");
+        => optionsBuilder.UseSqlServer(ConnectionString);
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
