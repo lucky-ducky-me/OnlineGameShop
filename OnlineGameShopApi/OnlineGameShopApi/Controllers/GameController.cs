@@ -20,7 +20,7 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return _onlineGameShopProvider.GetAllGames().ToArray();
+                return StatusCode(200, _onlineGameShopProvider.GetAllGames().ToArray());
             }
             catch (Exception ex)
             {
@@ -33,7 +33,7 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return _onlineGameShopProvider.GetGame(id);
+                return StatusCode(200, _onlineGameShopProvider.GetGame(id));
             }
             catch (Exception ex) 
             {
@@ -68,6 +68,32 @@ namespace OnlineGameShopApi.Controllers
                 return NoContent();
             }
             else
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("genres")]
+        public ActionResult<IEnumerable<DataBaseProvider.Models.Genre>> GetGenres()
+        {
+            try
+            {
+                return StatusCode(200, _onlineGameShopProvider.GetAllGenres().ToArray());
+            }
+            catch (Exception ex) 
+            {
+                return NotFound();
+            }
+        }
+
+        [HttpGet("genres/{id}")]
+        public ActionResult<DataBaseProvider.Models.Genre> GetGenre(Guid id)
+        {
+            try
+            {
+                return StatusCode(200, _onlineGameShopProvider.GetGenre(id));
+            }
+            catch (Exception ex)
             {
                 return NotFound();
             }

@@ -16,6 +16,11 @@ namespace DataBaseProvider
 
         public OnlineGameShopProvider(string connectionString) 
         {
+            if (connectionString == null)
+            {
+                throw new ArgumentNullException("Connection string should be initialize.", nameof(connectionString));
+            }
+
             _dbContext = new OnlineGameShopContext(connectionString);
         }
 
@@ -26,7 +31,7 @@ namespace DataBaseProvider
 
         public IEnumerable<Genre> GetAllGenres()
         {
-            throw new NotImplementedException();
+            return _dbContext.Genres.ToList();
         }
 
         public IEnumerable<Order> GetAllOrders()
@@ -51,7 +56,21 @@ namespace DataBaseProvider
 
         public Genre GetGenre(Guid id)
         {
-            throw new NotImplementedException();
+            var genres = _dbContext.Genres;
+
+            if (genres == null)
+            {
+                throw new Exception();
+            }
+
+            var genre = genres.FirstOrDefault(x => x.Id == id);
+
+            if (genre == null)
+            {
+                throw new Exception();
+            }
+            
+            return genre;
         }
 
         public Game GetGame(Guid id)
