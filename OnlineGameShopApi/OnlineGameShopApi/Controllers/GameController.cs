@@ -10,9 +10,15 @@ namespace OnlineGameShopApi.Controllers
     [Route("api/[controller]")]
     public class GameController : ControllerBase
     {
-        //todo вынести строку в конфиг файл
-        private IOnlineGameShopProvider _onlineGameShopProvider
-            = new OnlineGameShopProvider("Server=DESKTOP-N04FOJI;Database=OnlineGameShop;Trusted_Connection=True;TrustServerCertificate=true");
+        private readonly IConfiguration Configuration;
+
+        private IOnlineGameShopProvider _onlineGameShopProvider;
+
+        public GameController(IConfiguration configuration)
+        {
+            Configuration = configuration;
+            _onlineGameShopProvider = new OnlineGameShopProvider(Configuration.GetConnectionString("defaultConnection"));
+        }
 
         //todo изменинть на класс модели, а не на класс сущности бд
         [HttpGet("games")]
