@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq.Expressions;
 using System.Net;
+using DataBaseProvider.Models;
 
 namespace OnlineGameShopApi.Controllers
 {
@@ -17,12 +18,12 @@ namespace OnlineGameShopApi.Controllers
         public GameController(IConfiguration configuration)
         {
             Configuration = configuration;
-            _onlineGameShopProvider = new OnlineGameShopProvider(Configuration.GetConnectionString("defaultConnection"));
+            _onlineGameShopProvider = new OnlineGameShopProvider(
+                Configuration.GetConnectionString("defaultConnection"));
         }
 
-        //todo изменинть на класс модели, а не на класс сущности бд
         [HttpGet("games")]
-        public ActionResult<IEnumerable<DataBaseProvider.Models.Game>> GetGames()
+        public ActionResult<IEnumerable<Game>> GetGames()
         {
             try
             {
@@ -35,7 +36,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpGet("games/{id}")]
-        public ActionResult<DataBaseProvider.Models.Game> GetGame(Guid id)
+        public ActionResult<Game> GetGame(Guid id)
         {
             try
             {
@@ -48,7 +49,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpPost("games")]
-        public ActionResult<DataBaseProvider.Models.Game> AddGame(DataBaseProvider.Models.Game game) 
+        public ActionResult<Game> AddGame([FromBody] Game game) 
         {
             var result = _onlineGameShopProvider.AddGame(game);
 
@@ -65,7 +66,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpDelete("games")]
-        public ActionResult<DataBaseProvider.Models.Game> DeleteGame(Guid id)
+        public ActionResult<Game> DeleteGame(Guid id)
         {
             var result = _onlineGameShopProvider.DeleteGame(id);
 
@@ -80,7 +81,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpGet("genres")]
-        public ActionResult<IEnumerable<DataBaseProvider.Models.Genre>> GetGenres()
+        public ActionResult<IEnumerable<Genre>> GetGenres()
         {
             try
             {
@@ -93,7 +94,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpGet("genres/{id}")]
-        public ActionResult<DataBaseProvider.Models.Genre> GetGenre(Guid id)
+        public ActionResult<Genre> GetGenre(Guid id)
         {
             try
             {
