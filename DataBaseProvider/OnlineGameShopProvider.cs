@@ -41,7 +41,7 @@ namespace DataBaseProvider
 
         public IEnumerable<User> GetAllUsers()
         {
-            throw new NotImplementedException();
+            return _dbContext.Users.ToList();
         }
 
         public IEnumerable<UserScore> GetAllUsersScore()
@@ -51,7 +51,21 @@ namespace DataBaseProvider
 
         public User GetUser(Guid id)
         {
-            throw new NotImplementedException();
+            var users = _dbContext.Users;
+
+            if (users == null)
+            {
+                throw new Exception();
+            }
+
+            var user = users.FirstOrDefault(x => x.Id == id);
+
+            if (user == null)
+            {
+                throw new Exception();
+            }
+
+            return user;
         }
 
         public Genre GetGenre(Guid id)
@@ -104,7 +118,9 @@ namespace DataBaseProvider
 
         public bool AddUser(User user)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Add(user);
+
+            return _dbContext.SaveChanges() > 0;
         }
 
         public bool AddGame(Game game)
@@ -126,7 +142,9 @@ namespace DataBaseProvider
 
         public bool DeleteUser(Guid id)
         {
-            throw new NotImplementedException();
+            _dbContext.Users.Remove(new User { Id = id });
+
+            return _dbContext.SaveChanges() > 0;
         }
 
         public bool DeleteGame(Guid id)
