@@ -4,9 +4,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace DataBaseProvider.Models;
 
+/// <summary>
+/// Контекст базы данных магазина.
+/// </summary>
 public partial class OnlineGameShopContext : DbContext
 {
-
+    /// <summary>
+    /// Строка подключения.
+    /// </summary>
     private string ConnectionString { get; set; }
 
     public OnlineGameShopContext()
@@ -23,14 +28,29 @@ public partial class OnlineGameShopContext : DbContext
     {
     }
 
+    /// <summary>
+    /// Множество игр.
+    /// </summary>
     public virtual DbSet<Game> Games { get; set; }
 
+    /// <summary>
+    /// Множество жанров.
+    /// </summary>
     public virtual DbSet<Genre> Genres { get; set; }
 
+    /// <summary>
+    /// Множество заказов.
+    /// </summary>
     public virtual DbSet<Order> Orders { get; set; }
 
+    /// <summary>
+    /// Множество пользователей.
+    /// </summary>
     public virtual DbSet<User> Users { get; set; }
 
+    /// <summary>
+    /// Множество оценок пользователей.
+    /// </summary>
     public virtual DbSet<UserScore> UserScores { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
