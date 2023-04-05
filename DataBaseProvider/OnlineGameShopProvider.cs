@@ -39,11 +39,19 @@ namespace DataBaseProvider
             _dbContext = new OnlineGameShopContext(connectionString);
         }
 
+        /// <summary>
+        /// Получение всех игр.
+        /// </summary>
+        /// <returns>Коллекция игр.</returns>
         public IEnumerable<Game> GetAllGames()
         {
             return _dbContext.Games.ToList();
         }
 
+        /// <summary>
+        /// Получение всех жанров.
+        /// </summary>
+        /// <returns>Коллекция жанров.</returns>
         public IEnumerable<Genre> GetAllGenres()
         {
             return _dbContext.Genres.ToList();
@@ -87,39 +95,37 @@ namespace DataBaseProvider
             return user;
         }
 
+        /// <summary>
+        /// Получение жанра.
+        /// </summary>
+        /// <param name="id">Id жанра.</param>
+        /// <returns>Жанр.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public Genre GetGenre(Guid id)
         {
-            var genres = _dbContext.Genres;
-
-            if (genres == null)
-            {
-                throw new Exception();
-            }
-
-            var genre = genres.FirstOrDefault(x => x.Id == id);
+            var genre = _dbContext.Genres.FirstOrDefault(x => x.Id == id);
 
             if (genre == null)
             {
-                throw new Exception();
+                throw new ArgumentException($"Жанра с Id '{id}' не существует.", nameof(id));
             }
             
             return genre;
         }
 
+        /// <summary>
+        /// Получение игры.
+        /// </summary>
+        /// <param name="id">Id игры.</param>
+        /// <returns>Игра.</returns>
+        /// <exception cref="Exception"></exception>
         public Game GetGame(Guid id)
         {
-            var games = _dbContext.Games;
-           
-            if (games == null)
-            {
-                throw new Exception();
-            }
-
-            var game = games.FirstOrDefault(x => x.Id == id);
+            var game = _dbContext.Games.FirstOrDefault(x => x.Id == id);
 
             if (game == null)
             {
-                 throw new Exception();
+                 throw new ArgumentException($"Игра с Id '{id}' не существует.", nameof(id));
             }
 
             return game;
@@ -155,11 +161,26 @@ namespace DataBaseProvider
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool AddGame(Game game)
+        /// <summary>
+        /// Добавление игры.
+        /// </summary>
+        /// <param name="game">Игра.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddGame(Game game)
         {
+            var genre = game.GenreId;
+
+            if (genre == null)
+            {
+                throw new ArgumentException($"Жанра с Id '{game.GenreId}' не существует.", nameof(game));
+            }
+
+            game.GenreId = genre;
+            game.Genre = _dbContext.Genres.FirstOrDefault(x => x.Id == game.GenreId);
+
             _dbContext.Games.Add(game);
 
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
         }
 
         public bool AddOrder(Order order)
@@ -203,11 +224,23 @@ namespace DataBaseProvider
             return _dbContext.SaveChanges() > 0;
         }
 
-        public bool DeleteGame(Guid id)
+        /// <summary>
+        /// Удаление игры.
+        /// </summary>
+        /// <param name="id">Id игры.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void DeleteGame(Guid id)
         {
-            _dbContext.Games.Remove(new Game() { Id = id});
+            var game = _dbContext.Games.First(x => x.Id == id);
 
-            return _dbContext.SaveChanges() > 0;
+            if (game == null) 
+            {
+                throw new ArgumentException($"Игра с Id '{id}' не существует.", nameof(id));
+            }
+
+            _dbContext.Games.Remove(game);
+
+            _dbContext.SaveChanges();
         }
 
         public bool DeleteOrder(Guid id)
@@ -229,7 +262,7 @@ namespace DataBaseProvider
                 throw new ArgumentException($"Оценки с Id '{id}' не существует.", nameof(id));
             }
 
-            _dbContext.UserScores.Remove(new UserScore { Id = id });
+            _dbContext.UserScores.Remove(score);
 
             _dbContext.SaveChanges();
         }
@@ -256,6 +289,25 @@ namespace DataBaseProvider
             _dbContext.Update(updatedScore);
 
             _dbContext.SaveChanges();
+        }
+
+        public void UpdateGame(Game game)
+        {
+            var updatedGame = _dbContext.Games.First(g => g.Id == game.Id);
+
+            if (updatedGame == null)
+            {
+                throw new ArgumentException($"Игра с Id '{game.Id}' не существует.", nameof(game.Id));
+            }
+
+            updatedGame.Name = game.Name;
+            updatedGame.Genre = game.Genre;
+            updatedGame.Cost = game.Cost;
+            updatedGame.GenreId = game.GenreId;
+
+            _dbContext.Update(game); 
+
+            _dbContext.SaveChanges(); 
         }
     }
 }

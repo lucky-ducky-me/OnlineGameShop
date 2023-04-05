@@ -14,8 +14,16 @@ namespace DataBaseProvider
     {
         public IEnumerable<User> GetAllUsers();
 
+        /// <summary>
+        /// Получение всех жанров.
+        /// </summary>
+        /// <returns>Коллекция жанров.</returns>
         public IEnumerable<Genre> GetAllGenres();
 
+        /// <summary>
+        /// Получение всех игр.
+        /// </summary>
+        /// <returns>Коллекция игр.</returns>
         public IEnumerable<Game> GetAllGames();
 
         public IEnumerable<Order> GetAllOrders();
@@ -28,8 +36,17 @@ namespace DataBaseProvider
 
         public User GetUser(Guid id);
 
+        /// <summary>
+        /// Получение жанра.
+        /// </summary>
+        /// <param name="id">Id жанра.</param>
+        /// <returns>Жанр.</returns>
         public Genre GetGenre(Guid id);
 
+        /// <summary>
+        /// Получение игры.
+        /// </summary>
+        /// <param name="id">Id игры.</param>
         public Game GetGame(Guid id);   
 
         public Order GetOrder(Guid id);
@@ -43,7 +60,11 @@ namespace DataBaseProvider
 
         public bool AddUser(User user);
 
-        public bool AddGame(Game game);
+        /// <summary>
+        /// Добавление игры.
+        /// </summary>
+        /// <param name="game">Игра.</param>
+        public void AddGame(Game game);
 
         public bool AddOrder(Order order);
 
@@ -55,7 +76,11 @@ namespace DataBaseProvider
 
         public bool DeleteUser(Guid id);
 
-        public bool DeleteGame(Guid id);
+        /// <summary>
+        /// Удаление игры.
+        /// </summary>
+        /// <param name="id">Id игры.</param>
+        public void DeleteGame(Guid id);
 
         public bool DeleteOrder(Guid id);
 
@@ -71,5 +96,7 @@ namespace DataBaseProvider
         /// </summary>
         /// <param name="score">Оценка.</param>
         public void UpdateUserScore(UserScore score);
+
+        public void UpdateGame(Game game);
     }
 }
