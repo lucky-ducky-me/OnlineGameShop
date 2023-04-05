@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace DataBaseProvider
 {
@@ -36,7 +37,7 @@ namespace DataBaseProvider
 
         public IEnumerable<Order> GetAllOrders()
         {
-            throw new NotImplementedException();
+            return _dbContext.Orders.ToList();
         }
 
         public IEnumerable<User> GetAllUsers()
@@ -46,7 +47,7 @@ namespace DataBaseProvider
 
         public IEnumerable<UserScore> GetAllUsersScore()
         {
-            throw new NotImplementedException();
+            return _dbContext.UserScores.ToList();
         }
 
         public User GetUser(Guid id)
@@ -113,7 +114,21 @@ namespace DataBaseProvider
 
         public UserScore GetUserScore(Guid id)
         {
-            throw new NotImplementedException();
+            var scores = _dbContext.UserScores;
+
+            if (scores == null)
+            {
+                throw new Exception();
+            }
+
+            var score = scores.FirstOrDefault(x => x.Id == id);
+
+            if (score == null)
+            {
+                throw new Exception();
+            }
+
+            return score;
         }
 
         public bool AddUser(User user)
@@ -137,7 +152,9 @@ namespace DataBaseProvider
 
         public bool AddUserScore(UserScore score)
         {
-            throw new NotImplementedException();
+            _dbContext.UserScores.Add(score);
+
+            return _dbContext.SaveChanges() > 0;
         }
 
         public bool DeleteUser(Guid id)
@@ -161,7 +178,9 @@ namespace DataBaseProvider
 
         public bool DeleteUserScore(Guid id)
         {
-            throw new NotImplementedException();
+            _dbContext.UserScores.Remove(new UserScore { Id = id });
+
+            return _dbContext.SaveChanges() > 0;
         }
     }
 }
