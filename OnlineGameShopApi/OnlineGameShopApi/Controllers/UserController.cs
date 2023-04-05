@@ -47,7 +47,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpPost]
-        public ActionResult<User> Post([FromBody] User user)
+        public ActionResult<User> AddUser([FromBody] User user)
         {
             var result = _onlineGameShopProvider.AddUser(user);
 
@@ -64,7 +64,7 @@ namespace OnlineGameShopApi.Controllers
         }
 
         [HttpDelete("users")]
-        public ActionResult Delete(Guid id)
+        public ActionResult DeleteUser(Guid id)
         {
             var result = _onlineGameShopProvider.DeleteUser(id);
 
