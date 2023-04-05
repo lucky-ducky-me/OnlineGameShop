@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataBaseProvider
 {
+    /// <summary>
+    /// Провайдер к БД онлайн магазина игр.
+    /// </summary>
     public interface IOnlineGameShopProvider
     {
         public IEnumerable<User> GetAllUsers();
@@ -17,6 +20,10 @@ namespace DataBaseProvider
 
         public IEnumerable<Order> GetAllOrders();
 
+        /// <summary>
+        /// Получение всех оценок.
+        /// </summary>
+        /// <returns>Коллекция оценок.</returns>
         public IEnumerable<UserScore> GetAllUsersScore();
 
         public User GetUser(Guid id);
@@ -27,6 +34,11 @@ namespace DataBaseProvider
 
         public Order GetOrder(Guid id);
 
+        /// <summary>
+        /// Получение оценки.
+        /// </summary>
+        /// <param name="id">Id оценки.</param>
+        /// <returns>Оценка.</returns>
         public UserScore GetUserScore(Guid id);
 
         public bool AddUser(User user);
@@ -35,7 +47,11 @@ namespace DataBaseProvider
 
         public bool AddOrder(Order order);
 
-        public bool AddUserScore(UserScore score);
+        /// <summary>
+        /// Добавление оценки.
+        /// </summary>
+        /// <param name="score">Оценка.</param>
+        public void AddUserScore(UserScore score);
 
         public bool DeleteUser(Guid id);
 
@@ -43,6 +59,17 @@ namespace DataBaseProvider
 
         public bool DeleteOrder(Guid id);
 
-        public bool DeleteUserScore(Guid id);
+        /// <summary>
+        /// Удаление оценки.
+        /// </summary>
+        /// <param name="id">Id оценки.</param>
+        public void DeleteUserScore(Guid id);
+
+
+        /// <summary>
+        /// Изменение данных оценки.
+        /// </summary>
+        /// <param name="score">Оценка.</param>
+        public void UpdateUserScore(UserScore score);
     }
 }

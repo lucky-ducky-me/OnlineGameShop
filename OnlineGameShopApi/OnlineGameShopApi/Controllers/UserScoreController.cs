@@ -33,8 +33,15 @@ namespace OnlineGameShopApi.Controllers
         [HttpGet("scores")]
         public ActionResult<IEnumerable<UserScoreDataResponse>> GetScores()
         {
-            return _onlineGameShopProvider.GetAllUsersScore()
-                .Select(userScore => TransfromToUserScoreDataResponse(userScore)).ToArray();
+            try
+            {
+                return StatusCode(200, _onlineGameShopProvider.GetAllUsersScore()
+                    .Select(userScore => TransfromToUserScoreDataResponse(userScore)).ToArray());
+            }
+            catch (Exception ex) 
+            {
+                return NotFound(ex.Message);
+            }
         }
   
         /// <summary>
@@ -45,14 +52,21 @@ namespace OnlineGameShopApi.Controllers
         [HttpGet("scores/{id}")]
         public ActionResult<UserScoreDataResponse> GetScore(Guid id)
         {
-            return TransfromToUserScoreDataResponse(_onlineGameShopProvider.GetUserScore(id));
+            try
+            {
+                return StatusCode(200, TransfromToUserScoreDataResponse(_onlineGameShopProvider.GetUserScore(id)));
+            }
+            catch (Exception ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
 
         /// <summary>
         /// Добавление оценки игры.
         /// </summary>
         /// <param name="userScoreData">Модель оценки для запроса.</param>
-        /// <returns>Модель с данными добавленной оценки.</returns>
+        /// <returns>Результат добавления.</returns>
         [HttpPost("scores")]
         public ActionResult<UserScoreDataResponse> AddScore([FromBody] UserScoreDataRequest userScoreData)
         {
@@ -66,27 +80,51 @@ namespace OnlineGameShopApi.Controllers
                     , Score = userScoreData.Score
                 };
 
-                var result = _onlineGameShopProvider.AddUserScore(userScore);
+                _onlineGameShopProvider.AddUserScore(userScore);
 
-                if (result)
-                {
-                    var uri = $"http://http://localhost:5142/api/scores/{userScore.Id}";
+                var uri = $"http://http://localhost:5142/api/scores/{userScore.Id}";
 
-                    var userScoreDataResponse = TransfromToUserScoreDataResponse(userScore);
+                var userScoreDataResponse = TransfromToUserScoreDataResponse(userScore);
 
-                    return Created(uri, userScoreDataResponse);
-                }
-                else
-                {
-                    return Problem();
-                }
+                return Created(uri, userScoreDataResponse);
             }
             catch (Exception ex) 
             {
                 return Problem(ex.ToString());
             }
         }
- 
+
+        /// <summary>
+        /// Обновление данных оценки.
+        /// </summary>
+        /// <param name="userScoreData">Модель оценки для запроса.</param>
+        /// <returns>Результать обновления.</returns>
+        [HttpPut("scores")]
+        public ActionResult UpdateScore([FromBody] UserScoreDataRequest userScoreData)
+        {
+            try
+            {
+                var userScore = new UserScore
+                {
+                    Id = Guid.NewGuid()
+                    ,
+                    GameId = userScoreData.GameId
+                    ,
+                    UserId = userScoreData.UserId
+                    ,
+                    Score = userScoreData.Score
+                };
+
+                _onlineGameShopProvider.AddUserScore(userScore);
+
+                return NoContent();
+            }
+            catch (Exception ex)
+            {
+                return Problem(ex.ToString());
+            }
+        }
+
         /// <summary>
         /// Удаление игры по Id.
         /// </summary>
@@ -95,15 +133,15 @@ namespace OnlineGameShopApi.Controllers
         [HttpDelete("scores")]
         public ActionResult DeleteScore(Guid id)
         {
-            var result = _onlineGameShopProvider.DeleteUserScore(id);
-
-            if (result)
+            try
             {
+                _onlineGameShopProvider.DeleteUserScore(id);
+
                 return NoContent();
             }
-            else
-            {
-                return NotFound();
+            catch (Exception ex) 
+            {   
+                return NotFound(ex.Message); 
             }
         }
 

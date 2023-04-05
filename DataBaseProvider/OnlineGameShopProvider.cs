@@ -9,12 +9,26 @@ using static System.Formats.Asn1.AsnWriter;
 
 namespace DataBaseProvider
 {
+    /// <summary>
+    /// Провайдер к БД онлайн магазина игр.
+    /// </summary>
     public class OnlineGameShopProvider : IOnlineGameShopProvider
     {
+        /// <summary>
+        /// Контекст базы данных.
+        /// </summary>
         private OnlineGameShopContext _dbContext;
 
+        /// <summary>
+        /// Строка подключения к БД.
+        /// </summary>
         internal string ConnectionString { get; set; }
 
+        /// <summary>
+        /// Создание провайдера.
+        /// </summary>
+        /// <param name="connectionString">Строка подключение к БД.</param>
+        /// <exception cref="ArgumentNullException">Пустая строка.</exception>
         public OnlineGameShopProvider(string connectionString) 
         {
             if (connectionString == null)
@@ -45,6 +59,10 @@ namespace DataBaseProvider
             return _dbContext.Users.ToList();
         }
 
+        /// <summary>
+        /// Получение всех оценок.
+        /// </summary>
+        /// <returns>Коллекция оценок.</returns>
         public IEnumerable<UserScore> GetAllUsersScore()
         {
             return _dbContext.UserScores.ToList();
@@ -112,20 +130,19 @@ namespace DataBaseProvider
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// Получение оценки.
+        /// </summary>
+        /// <param name="id">Id оценки.</param>
+        /// <returns>Оценка.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public UserScore GetUserScore(Guid id)
         {
-            var scores = _dbContext.UserScores;
-
-            if (scores == null)
-            {
-                throw new Exception();
-            }
-
-            var score = scores.FirstOrDefault(x => x.Id == id);
+            var score = _dbContext.UserScores.FirstOrDefault(x => x.Id == id);
 
             if (score == null)
             {
-                throw new Exception();
+                throw new ArgumentException($"Оценки с Id '{id}' не существует.", nameof(id));
             }
 
             return score;
@@ -150,11 +167,33 @@ namespace DataBaseProvider
             throw new NotImplementedException();
         }
 
-        public bool AddUserScore(UserScore score)
+        /// <summary>
+        /// Добавление оценки.
+        /// </summary>
+        /// <param name="score">Оценка.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddUserScore(UserScore score)
         {
+            var game = _dbContext.Games.First(x => x.Id == (Guid)score.GameId);
+
+            if (game == null)
+            {
+                throw new ArgumentException($"Игры с Id '{score.GameId}' не существет ");
+            }
+
+            var user = _dbContext.Users.First(x => x.Id == (Guid)score.UserId);
+
+            if (user == null)
+            {
+                throw new ArgumentException($"Пользователя с Id '{score.UserId}' не существет ");
+            }
+
+            score.Game = game;
+            score.User = user;
+
             _dbContext.UserScores.Add(score);
 
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
         }
 
         public bool DeleteUser(Guid id)
@@ -176,11 +215,47 @@ namespace DataBaseProvider
             throw new NotImplementedException();
         }
 
-        public bool DeleteUserScore(Guid id)
+        /// <summary>
+        /// Удаление оценки.
+        /// </summary>
+        /// <param name="id">Id оценки.</param>\
+        /// <exception cref="ArgumentException"></exception>
+        public void DeleteUserScore(Guid id)
         {
+            var score = _dbContext.UserScores.First(x => x.Id == id);
+
+            if (score == null)
+            {
+                throw new ArgumentException($"Оценки с Id '{id}' не существует.", nameof(id));
+            }
+
             _dbContext.UserScores.Remove(new UserScore { Id = id });
 
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
+        }
+
+        /// <summary>
+        /// Изменение данных оценки.
+        /// </summary>
+        /// <param name="score">Оценка.</param>
+        public void UpdateUserScore(UserScore score)
+        {
+            var updatedScore = _dbContext.UserScores.First(s => s.Id == score.Id);
+
+            if (updatedScore == null)
+            {
+                throw new ArgumentException($"Оценки с Id '{score.Id}' не существует.", nameof(score));
+            }
+
+            updatedScore.Score = score.Score;
+            updatedScore.User = score.User;
+            updatedScore.UserId = score.UserId;
+            updatedScore.GameId = score.GameId;
+            updatedScore.Game = score.Game;
+
+            _dbContext.Update(updatedScore);
+
+            _dbContext.SaveChanges();
         }
     }
 }
