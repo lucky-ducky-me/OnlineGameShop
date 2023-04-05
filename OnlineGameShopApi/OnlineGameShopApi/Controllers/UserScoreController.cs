@@ -29,7 +29,7 @@ namespace OnlineGameShopApi.Controllers
         /// <summary>
         /// Получение всех оценок пользователей.
         /// </summary>
-        /// <returns>Список оценок.</returns>
+        /// <returns>Коллекция оценок.</returns>
         [HttpGet("scores")]
         public ActionResult<IEnumerable<UserScoreDataResponse>> GetScores()
         {
@@ -48,7 +48,7 @@ namespace OnlineGameShopApi.Controllers
         /// Получение оценки пользователя по Id.
         /// </summary>
         /// <param name="id">Id пользователя.</param>
-        /// <returns>Оценку.</returns>
+        /// <returns>Оценка.</returns>
         [HttpGet("scores/{id}")]
         public ActionResult<UserScoreDataResponse> GetScore(Guid id)
         {
@@ -100,22 +100,15 @@ namespace OnlineGameShopApi.Controllers
         /// <param name="userScoreData">Модель оценки для запроса.</param>
         /// <returns>Результать обновления.</returns>
         [HttpPut("scores")]
-        public ActionResult UpdateScore([FromBody] UserScoreDataRequest userScoreData)
+        public ActionResult UpdateScore([FromQuery] Guid id, [FromQuery] short score)
         {
             try
             {
-                var userScore = new UserScore
-                {
-                    Id = Guid.NewGuid()
-                    ,
-                    GameId = userScoreData.GameId
-                    ,
-                    UserId = userScoreData.UserId
-                    ,
-                    Score = userScoreData.Score
-                };
+                var userScore = _onlineGameShopProvider.GetUserScore(id);
 
-                _onlineGameShopProvider.AddUserScore(userScore);
+                userScore.Score = score;
+
+                _onlineGameShopProvider.UpdateUserScore(userScore);
 
                 return NoContent();
             }
@@ -146,10 +139,10 @@ namespace OnlineGameShopApi.Controllers
         }
 
         /// <summary>
-        /// Трансформация из сущности БД с модель для ответа.
+        /// Преобразование оценки из сущности БД в модель для ответа.
         /// </summary>
         /// <param name="userScore">Сущность БД.</param>
-        /// <returns>Модель ответа.</returns>
+        /// <returns>Модель для ответа.</returns>
         private UserScoreDataResponse TransfromToUserScoreDataResponse(UserScore userScore)
         {
             var gameName = _onlineGameShopProvider.GetGame((Guid) userScore.GameId).Name;
