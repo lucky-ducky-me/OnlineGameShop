@@ -46,7 +46,7 @@ namespace OnlineGameShopApi.Controllers
             }
         }
 
-        [HttpPost]
+        [HttpPost("users")]
         public ActionResult<User> AddUser([FromBody] User user)
         {
             var result = _onlineGameShopProvider.AddUser(user);
