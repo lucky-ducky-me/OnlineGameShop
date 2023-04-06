@@ -1,5 +1,6 @@
 ﻿using DataBaseProvider;
 using DataBaseProvider.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using OnlineGameShopApi.SerializationModels;
 
@@ -36,7 +37,11 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllUsersScore()
-                    .Select(userScore => TransformToUserScoreDataResponse(userScore)).ToArray());
+                    .Select(userScore => 
+                        Transform.TransformToUserScoreDataResponse(userScore
+                        , _onlineGameShopProvider.GetGame((Guid)userScore.GameId)
+                        , _onlineGameShopProvider.GetUser((Guid)userScore.UserId)))
+                    .ToArray());
             }
             catch (Exception ex) 
             {
@@ -54,7 +59,13 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return StatusCode(200, TransformToUserScoreDataResponse(_onlineGameShopProvider.GetUserScore(id)));
+                var userScore = _onlineGameShopProvider.GetUserScore(id);
+
+                var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
+
+                var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
+
+                return StatusCode(200, Transform.TransformToUserScoreDataResponse(userScore, game, user));
             }
             catch (Exception ex)
             {
@@ -138,32 +149,6 @@ namespace OnlineGameShopApi.Controllers
             }
         }
 
-        /// <summary>
-        /// Преобразование оценки из сущности БД в модель для ответа.
-        /// </summary>
-        /// <param name="userScore">Сущность БД.</param>
-        /// <returns>Модель для ответа.</returns>
-        private UserScoreDataResponse TransformToUserScoreDataResponse(UserScore userScore)
-        {
-            var gameName = _onlineGameShopProvider.GetGame((Guid) userScore.GameId).Name;
-
-            var userName = _onlineGameShopProvider.GetUser((Guid) userScore.UserId).Name;
-
-            var userScoreDataResponse = new UserScoreDataResponse
-            {
-                Id = userScore.Id,
-                GameId = (Guid) userScore.GameId
-                ,
-                UserId = (Guid) userScore.UserId
-                ,
-                Score = userScore.Score
-                ,
-                GameName = gameName
-                ,
-                UserName = userName
-            };
-
-            return userScoreDataResponse;
-        }
+        
     }
 }

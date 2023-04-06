@@ -39,7 +39,10 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllGames()
-                    .Select(game => TransformToGameResponse(game)).ToArray());
+                    .Select(game => {
+                        game.Genre = _onlineGameShopProvider.GetGenre(game.Id);
+                        return Transform.TransformToGameResponse(game);
+                        }).ToArray());
             }
             catch (Exception ex)
             {
@@ -57,7 +60,11 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return StatusCode(200, TransformToGameResponse(_onlineGameShopProvider.GetGame(id)));
+                var game = _onlineGameShopProvider.GetGame(id);
+
+                game.Genre = _onlineGameShopProvider.GetGenre((Guid)game.GenreId);
+
+                return StatusCode(200, Transform.TransformToGameResponse(game));
             }
             catch (Exception ex) 
             {
@@ -86,7 +93,7 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/games/{game.Id}";
 
-                return Created(uri, TransformToGameResponse(game));
+                return Created(uri, Transform.TransformToGameResponse(game, _onlineGameShopProvider.GetGenre((Guid)game.GenreId)));
                
             }
             catch (Exception ex)
@@ -153,7 +160,7 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllGenres()
-                    .Select(genre => TransformToGenreResponse(genre)).ToArray());
+                    .Select(genre => Transform.TransformToGenreResponse(genre)).ToArray());
             }
             catch (Exception ex) 
             {
@@ -171,48 +178,12 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return StatusCode(200, TransformToGenreResponse(_onlineGameShopProvider.GetGenre(id)));
+                return StatusCode(200, Transform.TransformToGenreResponse(_onlineGameShopProvider.GetGenre(id)));
             }
             catch (Exception ex)
             {
                 return NotFound(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Преобразование жанра из сущности БД в модель для ответа.
-        /// </summary>
-        /// <param name="genre">Сущность БД.</param>
-        /// <returns>Модель для ответа.</returns>
-        private GenreDataResponse TransformToGenreResponse(Genre genre)
-        {
-            if (genre == null)
-            {
-                return null;
-            }
-
-            return new GenreDataResponse { Id = genre.Id, GenreName = genre.GenreName };
-        }
-
-        /// <summary>
-        ///  Преобразование игры из сущности БД в модель для ответа.
-        /// </summary>
-        /// <param name="game">Сущность БД.</param>
-        /// <returns>Модель для ответа.</returns>
-        private GameDataResponse TransformToGameResponse(Game game)
-        {
-            if (game == null)
-            {
-                return null;
-            }
-
-            var genreResponse = TransformToGenreResponse(_onlineGameShopProvider.GetGenre((Guid) game.GenreId));
-
-            return new GameDataResponse { 
-                Id = game.Id
-                , Genre = genreResponse
-                , Cost = game.Cost
-                , Name = game.Name };
-        }
+        } 
     }
 }

@@ -37,7 +37,7 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllUsers()
-                    .Select(user => TransformToUserDataResponse(user)).ToArray());
+                    .Select(user => Transform.TransformToUserData(user)).ToArray());
             }
             catch (Exception ex)
             {
@@ -55,7 +55,7 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return StatusCode(200, TransformToUserDataResponse(_onlineGameShopProvider.GetUser(id)));
+                return StatusCode(200, Transform.TransformToUserData(_onlineGameShopProvider.GetUser(id)));
             }
             catch (Exception ex)
             {
@@ -75,7 +75,7 @@ namespace OnlineGameShopApi.Controllers
             {
                 var user = new User
                 {
-                    Id = userData.Id,
+                    Id = Guid.NewGuid(),
                     Name = userData.Name,
                     Login = userData.Login,
                     Password = userData.Password,
@@ -86,7 +86,7 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/users/{user.Id}";
 
-                return Created(uri, TransformToUserDataResponse(user));
+                return Created(uri, Transform.TransformToUserData(user));
             }
             catch (Exception ex)
             {
@@ -143,28 +143,6 @@ namespace OnlineGameShopApi.Controllers
             {
                 return NotFound(ex.Message);
             }
-        }
-
-        /// <summary>
-        /// Преобразование пользователя из сущности БД в модель.
-        /// </summary>
-        /// <param name="user">Сущность БД.</param>
-        /// <returns>Модель для ответов.</returns>
-        private UserData TransformToUserDataResponse(User user)
-        {
-            if (user == null)
-            {
-                return null;
-            }
-
-            return new UserData
-            {
-                Id = user.Id,
-                Name = user.Name,
-                Login = user.Login,
-                Phone = user.Phone,
-                Password = null!
-            };
         }
     }
 }
