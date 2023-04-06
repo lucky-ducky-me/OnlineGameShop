@@ -76,11 +76,11 @@ namespace OnlineGameShopApi.SerializationModels
         /// </summary>
         /// <param name="userScore">Сущность БД.</param>
         /// <returns>Модель для ответа.</returns>
-        internal static UserScoreDataResponse TransformToUserScoreDataResponse(UserScore userScore, Game game, User user)
+        internal static UserScoreDataResponse TransformToUserScoreDataResponse(UserScore userScore)
         {
-            var gameData = Transform.TransformToGameResponse(game);
+            var gameData = Transform.TransformToGameResponse(userScore.Game);
 
-            var userData = Transform.TransformToUserData(user);
+            var userData = Transform.TransformToUserData(userScore.User);
 
             var userScoreDataResponse = new UserScoreDataResponse
             {

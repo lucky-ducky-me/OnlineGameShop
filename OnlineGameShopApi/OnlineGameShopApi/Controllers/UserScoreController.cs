@@ -37,10 +37,17 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllUsersScore()
-                    .Select(userScore => 
-                        Transform.TransformToUserScoreDataResponse(userScore
-                        , _onlineGameShopProvider.GetGame((Guid)userScore.GameId)
-                        , _onlineGameShopProvider.GetUser((Guid)userScore.UserId)))
+                    .Select(userScore => {
+                        var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
+                        game.Genre = _onlineGameShopProvider.GetGenre((Guid)game.GenreId);
+
+                        var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
+
+                        userScore.User = user;
+                        userScore.Game = game;
+
+                        return Transform.TransformToUserScoreDataResponse(userScore);
+                        })
                     .ToArray());
             }
             catch (Exception ex) 
@@ -62,10 +69,14 @@ namespace OnlineGameShopApi.Controllers
                 var userScore = _onlineGameShopProvider.GetUserScore(id);
 
                 var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
+                game.Genre = _onlineGameShopProvider.GetGenre((Guid)game.GenreId);
 
                 var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
 
-                return StatusCode(200, Transform.TransformToUserScoreDataResponse(userScore, game, user));
+                userScore.User = user;
+                userScore.Game = game;
+
+                return StatusCode(200, Transform.TransformToUserScoreDataResponse(userScore));
             }
             catch (Exception ex)
             {
@@ -95,7 +106,15 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/scores/{userScore.Id}";
 
-                var userScoreDataResponse = TransformToUserScoreDataResponse(userScore);
+                var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
+                game.Genre = _onlineGameShopProvider.GetGenre((Guid)game.GenreId);
+
+                var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
+
+                userScore.User = user;
+                userScore.Game = game;
+
+                var userScoreDataResponse = Transform.TransformToUserScoreDataResponse(userScore);
 
                 return Created(uri, userScoreDataResponse);
             }
