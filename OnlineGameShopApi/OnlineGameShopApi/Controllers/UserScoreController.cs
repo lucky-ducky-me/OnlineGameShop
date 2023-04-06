@@ -37,15 +37,10 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllUsersScore()
-                    .Select(userScore => {
-                        var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
-                        game.Genre = _onlineGameShopProvider.GetGenre(game.Id);
-
-                        return Transform.TransformToUserScoreDataResponse(userScore
-                            , game
-                            , _onlineGameShopProvider.GetUser((Guid)userScore.UserId));
-                        
-                        })
+                    .Select(userScore => 
+                        Transform.TransformToUserScoreDataResponse(userScore
+                        , _onlineGameShopProvider.GetGame((Guid)userScore.GameId)
+                        , _onlineGameShopProvider.GetUser((Guid)userScore.UserId)))
                     .ToArray());
             }
             catch (Exception ex) 
@@ -67,8 +62,6 @@ namespace OnlineGameShopApi.Controllers
                 var userScore = _onlineGameShopProvider.GetUserScore(id);
 
                 var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
-
-                game.Genre = _onlineGameShopProvider.GetGenre(game.Id);
 
                 var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
 
@@ -102,13 +95,7 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/scores/{userScore.Id}";
 
-                var game = _onlineGameShopProvider.GetGame((Guid)userScore.GameId);
-
-                game.Genre = _onlineGameShopProvider.GetGenre(game.Id);
-
-                var user = _onlineGameShopProvider.GetUser((Guid)userScore.UserId);
-
-                var userScoreDataResponse = Transform.TransformToUserScoreDataResponse(userScore, game, user);
+                var userScoreDataResponse = TransformToUserScoreDataResponse(userScore);
 
                 return Created(uri, userScoreDataResponse);
             }
@@ -161,5 +148,7 @@ namespace OnlineGameShopApi.Controllers
                 return NotFound(ex.Message); 
             }
         }
+
+        
     }
 }
