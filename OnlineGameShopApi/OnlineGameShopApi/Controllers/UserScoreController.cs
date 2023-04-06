@@ -36,7 +36,7 @@ namespace OnlineGameShopApi.Controllers
             try
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllUsersScore()
-                    .Select(userScore => TransfromToUserScoreDataResponse(userScore)).ToArray());
+                    .Select(userScore => TransformToUserScoreDataResponse(userScore)).ToArray());
             }
             catch (Exception ex) 
             {
@@ -54,7 +54,7 @@ namespace OnlineGameShopApi.Controllers
         {
             try
             {
-                return StatusCode(200, TransfromToUserScoreDataResponse(_onlineGameShopProvider.GetUserScore(id)));
+                return StatusCode(200, TransformToUserScoreDataResponse(_onlineGameShopProvider.GetUserScore(id)));
             }
             catch (Exception ex)
             {
@@ -84,7 +84,7 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/scores/{userScore.Id}";
 
-                var userScoreDataResponse = TransfromToUserScoreDataResponse(userScore);
+                var userScoreDataResponse = TransformToUserScoreDataResponse(userScore);
 
                 return Created(uri, userScoreDataResponse);
             }
@@ -143,7 +143,7 @@ namespace OnlineGameShopApi.Controllers
         /// </summary>
         /// <param name="userScore">Сущность БД.</param>
         /// <returns>Модель для ответа.</returns>
-        private UserScoreDataResponse TransfromToUserScoreDataResponse(UserScore userScore)
+        private UserScoreDataResponse TransformToUserScoreDataResponse(UserScore userScore)
         {
             var gameName = _onlineGameShopProvider.GetGame((Guid) userScore.GameId).Name;
 

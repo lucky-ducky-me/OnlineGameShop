@@ -62,6 +62,10 @@ namespace DataBaseProvider
             return _dbContext.Orders.ToList();
         }
 
+        /// <summary>
+        /// Получение всех пользователей.
+        /// </summary>
+        /// <returns>Коллекция пользователей.</returns>
         public IEnumerable<User> GetAllUsers()
         {
             return _dbContext.Users.ToList();
@@ -76,20 +80,19 @@ namespace DataBaseProvider
             return _dbContext.UserScores.ToList();
         }
 
+        /// <summary>
+        /// Получение пользователя.
+        /// </summary>
+        /// <param name="id">Id пользователя.</param>
+        /// <returns>Пользователя.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public User GetUser(Guid id)
         {
-            var users = _dbContext.Users;
-
-            if (users == null)
-            {
-                throw new Exception();
-            }
-
-            var user = users.FirstOrDefault(x => x.Id == id);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == id);
 
             if (user == null)
             {
-                throw new Exception();
+                throw new ArgumentException($"Пользователя с Id '{id}' не существует.", nameof(id));
             }
 
             return user;
@@ -154,11 +157,15 @@ namespace DataBaseProvider
             return score;
         }
 
-        public bool AddUser(User user)
+        /// <summary>
+        /// Добавление пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь.</param>
+        public void AddUser(User user)
         {
             _dbContext.Users.Add(user);
 
-            return _dbContext.SaveChanges() > 0;
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -217,11 +224,23 @@ namespace DataBaseProvider
             _dbContext.SaveChanges();
         }
 
-        public bool DeleteUser(Guid id)
+        /// <summary>
+        /// Удаление пользователя.
+        /// </summary>
+        /// <param name="id">Id пользователя.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void DeleteUser(Guid id)
         {
-            _dbContext.Users.Remove(new User { Id = id });
+            var user = _dbContext.Users.First(user => user.Id == id);
 
-            return _dbContext.SaveChanges() > 0;
+            if (user == null) 
+            {
+                throw new ArgumentException($"Пользователя с Id '{id}' не существует.", nameof(id));
+            }
+
+            _dbContext.Users.Remove(user);
+
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -278,7 +297,7 @@ namespace DataBaseProvider
             if (updatedScore == null)
             {
                 throw new ArgumentException($"Оценки с Id '{score.Id}' не существует.", nameof(score));
-            }
+            }       
 
             updatedScore.Score = score.Score;
             updatedScore.User = score.User;
@@ -291,6 +310,11 @@ namespace DataBaseProvider
             _dbContext.SaveChanges();
         }
 
+        /// <summary>
+        /// Изменение данных игры.
+        /// </summary>
+        /// <param name="game">Игра.</param>
+        /// <exception cref="ArgumentException"></exception>
         public void UpdateGame(Game game)
         {
             var updatedGame = _dbContext.Games.First(g => g.Id == game.Id);
@@ -308,6 +332,30 @@ namespace DataBaseProvider
             _dbContext.Update(game); 
 
             _dbContext.SaveChanges(); 
+        }
+
+        /// <summary>
+        /// Обновление пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void UpdateUser(User user)
+        {
+            var updateUser = _dbContext.Users.First(g => g.Id == user.Id);
+
+            if (updateUser == null)
+            {
+                throw new ArgumentException($"Пользователь не существует.", nameof(updateUser));
+            }
+
+            updateUser.Name = user.Name;
+            updateUser.Login = user.Login;
+            updateUser.Password = user.Password;
+            updateUser.Phone = user.Phone;
+
+            _dbContext.Update(updateUser);
+
+            _dbContext.SaveChanges();
         }
     }
 }

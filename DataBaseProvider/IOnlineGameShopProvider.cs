@@ -12,6 +12,10 @@ namespace DataBaseProvider
     /// </summary>
     public interface IOnlineGameShopProvider
     {
+        /// <summary>
+        /// Получение всех пользователей.
+        /// </summary>
+        /// <returns>Коллекция пользователей.</returns>
         public IEnumerable<User> GetAllUsers();
 
         /// <summary>
@@ -34,6 +38,11 @@ namespace DataBaseProvider
         /// <returns>Коллекция оценок.</returns>
         public IEnumerable<UserScore> GetAllUsersScore();
 
+        /// <summary>
+        /// Получение пользователя.
+        /// </summary>
+        /// <param name="id">Id пользователя.</param>
+        /// <returns>Пользователя.</returns>
         public User GetUser(Guid id);
 
         /// <summary>
@@ -58,7 +67,11 @@ namespace DataBaseProvider
         /// <returns>Оценка.</returns>
         public UserScore GetUserScore(Guid id);
 
-        public bool AddUser(User user);
+        /// <summary>
+        /// Добавление пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь.</param>
+        public void AddUser(User user);
 
         /// <summary>
         /// Добавление игры.
@@ -74,7 +87,11 @@ namespace DataBaseProvider
         /// <param name="score">Оценка.</param>
         public void AddUserScore(UserScore score);
 
-        public bool DeleteUser(Guid id);
+        /// <summary>
+        /// Удаление пользователя.
+        /// </summary>
+        /// <param name="id">Id пользователя.</param>
+        public void DeleteUser(Guid id);
 
         /// <summary>
         /// Удаление игры.
@@ -90,13 +107,22 @@ namespace DataBaseProvider
         /// <param name="id">Id оценки.</param>
         public void DeleteUserScore(Guid id);
 
-
         /// <summary>
         /// Изменение данных оценки.
         /// </summary>
         /// <param name="score">Оценка.</param>
         public void UpdateUserScore(UserScore score);
 
+        /// <summary>
+        /// Изменение данных игры.
+        /// </summary>
+        /// <param name="game">Игра.</param>
         public void UpdateGame(Game game);
+
+        /// <summary>
+        /// Обновление пользователя.
+        /// </summary>
+        /// <param name="user">Пользователь.</param>
+        public void UpdateUser(User user);
     }
 }
