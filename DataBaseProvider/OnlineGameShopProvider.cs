@@ -57,9 +57,13 @@ namespace DataBaseProvider
             return _dbContext.Genres.ToList();
         }
 
+        /// <summary>
+        /// Получение всех заказов.
+        /// </summary>
+        /// <returns>Коллекция заказов.</returns>
         public IEnumerable<Order> GetAllOrders()
         {
-            return _dbContext.Orders.ToList();
+            return _dbContext.Orders;
         }
 
         /// <summary>
@@ -134,9 +138,22 @@ namespace DataBaseProvider
             return game;
         }
 
+        /// <summary>
+        /// Получение заказа по Id.
+        /// </summary>
+        /// <param name="id">Id.</param>
+        /// <returns>Заказ.</returns>
+        /// <exception cref="ArgumentException"></exception>
         public Order GetOrder(Guid id)
         {
-            throw new NotImplementedException();
+            var order = _dbContext.Orders.FirstOrDefault(x => x.Id == id);
+
+            if (order == null)
+            {
+                throw new ArgumentException($"Заказ с Id '{id}' не существует.", nameof(id));
+            }
+
+            return order;
         }
 
         /// <summary>
@@ -190,9 +207,33 @@ namespace DataBaseProvider
             _dbContext.SaveChanges();
         }
 
-        public bool AddOrder(Order order)
+        /// <summary>
+        /// Добавление заказа.
+        /// </summary>
+        /// <param name="order">Заказ.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void AddOrder(Order order)
         {
-            throw new NotImplementedException();
+            var game = _dbContext.Games.First(x => x.Id == (Guid)order.GameId);
+
+            if (game == null)
+            {
+                throw new ArgumentException($"Игры с Id '{order.GameId}' не существет ");
+            }
+
+            var user = _dbContext.Users.First(x => x.Id == (Guid)order.UserId);
+
+            if (user == null)
+            {
+                throw new ArgumentException($"Пользователя с Id '{order.UserId}' не существет ");
+            }
+
+            order.Game = game;
+            order.User = user;
+
+            _dbContext.Orders.Add(order);
+
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -262,9 +303,23 @@ namespace DataBaseProvider
             _dbContext.SaveChanges();
         }
 
-        public bool DeleteOrder(Guid id)
+        /// <summary>
+        /// Удаление заказа.
+        /// </summary>
+        /// <param name="id">Id заказа.</param>
+        /// <exception cref="ArgumentException"></exception>
+        public void DeleteOrder(Guid id)
         {
-            throw new NotImplementedException();
+            var order = _dbContext.Orders.First(x => x.Id == id);
+
+            if (order == null)
+            {
+                throw new ArgumentException($"Заказа с Id '{id}' не существует.", nameof(id));
+            }
+
+            _dbContext.Orders.Remove(order);
+
+            _dbContext.SaveChanges();
         }
 
         /// <summary>
@@ -356,6 +411,11 @@ namespace DataBaseProvider
             _dbContext.Update(updateUser);
 
             _dbContext.SaveChanges();
+        }
+
+        public void UpdateOrder(Order order)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -30,6 +30,10 @@ namespace DataBaseProvider
         /// <returns>Коллекция игр.</returns>
         public IEnumerable<Game> GetAllGames();
 
+        /// <summary>
+        /// Получение всех заказов.
+        /// </summary>
+        /// <returns>Коллекция заказов.</returns>
         public IEnumerable<Order> GetAllOrders();
 
         /// <summary>
@@ -56,8 +60,13 @@ namespace DataBaseProvider
         /// Получение игры.
         /// </summary>
         /// <param name="id">Id игры.</param>
-        public Game GetGame(Guid id);   
+        public Game GetGame(Guid id);
 
+        /// <summary>
+        /// Получение заказа по Id.
+        /// </summary>
+        /// <param name="id">Id.</param>
+        /// <returns>Заказ.</returns>
         public Order GetOrder(Guid id);
 
         /// <summary>
@@ -79,7 +88,11 @@ namespace DataBaseProvider
         /// <param name="game">Игра.</param>
         public void AddGame(Game game);
 
-        public bool AddOrder(Order order);
+        /// <summary>
+        /// Добавление заказа.
+        /// </summary>
+        /// <param name="order">Заказ.</param>
+        public void AddOrder(Order order);
 
         /// <summary>
         /// Добавление оценки.
@@ -99,7 +112,11 @@ namespace DataBaseProvider
         /// <param name="id">Id игры.</param>
         public void DeleteGame(Guid id);
 
-        public bool DeleteOrder(Guid id);
+        /// <summary>
+        /// Удаление заказа.
+        /// </summary>
+        /// <param name="id">Id заказа.</param>
+        public void DeleteOrder(Guid id);
 
         /// <summary>
         /// Удаление оценки.
@@ -124,5 +141,7 @@ namespace DataBaseProvider
         /// </summary>
         /// <param name="user">Пользователь.</param>
         public void UpdateUser(User user);
+
+        public void UpdateOrder(Order order);
     }
 }

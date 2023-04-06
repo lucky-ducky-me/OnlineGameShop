@@ -1,4 +1,5 @@
 ﻿using DataBaseProvider.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace OnlineGameShopApi.SerializationModels
 {
@@ -85,18 +86,37 @@ namespace OnlineGameShopApi.SerializationModels
             var userScoreDataResponse = new UserScoreDataResponse
             {
                 Id = userScore.Id,
-                GameId = (Guid)userScore.GameId
-                ,
-                UserId = (Guid)userScore.UserId
-                ,
-                Score = userScore.Score
-                ,
-                Game = gameData
-                ,
+                GameId = (Guid)userScore.GameId,
+                UserId = (Guid)userScore.UserId,
+                Score = userScore.Score,
+                Game = gameData,
                 User = userData
             };
 
             return userScoreDataResponse;
+        }
+
+        /// <summary>
+        /// Преобразование заказа из сущности БД в модель для ответа.
+        /// </summary>
+        /// <param name="order">Сущность БД.</param>
+        /// <returns>Модель для ответа.</returns>
+        internal static OrderDataResponse TransformToOrderDataResponse(Order order)
+        {
+            var gameData = TransformToGameResponse(order.Game);
+
+            var userData = TransformToUserData(order.User);
+
+            var orderDataResponse = new OrderDataResponse
+            {
+                Id = order.Id,
+                GameId = (Guid)order.GameId,
+                UserId = (Guid)order.UserId,
+                Game = gameData,
+                User = userData
+            };
+
+            return orderDataResponse;
         }
     }
 }
