@@ -63,7 +63,7 @@ namespace DataBaseProvider
         /// <returns>Коллекция заказов.</returns>
         public IEnumerable<Order> GetAllOrders()
         {
-            return _dbContext.Orders;
+            return _dbContext.Orders.ToList();
         }
 
         /// <summary>
@@ -214,14 +214,14 @@ namespace DataBaseProvider
         /// <exception cref="ArgumentException"></exception>
         public void AddOrder(Order order)
         {
-            var game = _dbContext.Games.First(x => x.Id == (Guid)order.GameId);
+            var game = _dbContext.Games.FirstOrDefault(x => x.Id == (Guid)order.GameId);
 
             if (game == null)
             {
                 throw new ArgumentException($"Игры с Id '{order.GameId}' не существет ");
             }
 
-            var user = _dbContext.Users.First(x => x.Id == (Guid)order.UserId);
+            var user = _dbContext.Users.FirstOrDefault(x => x.Id == (Guid)order.UserId);
 
             if (user == null)
             {

@@ -1,4 +1,6 @@
-﻿namespace OnlineGameShopApi.SerializationModels
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace OnlineGameShopApi.SerializationModels
 {
     /// <summary>
     /// Модель заказаза для запросов.
@@ -8,6 +10,7 @@
         /// <summary>
         /// Время заказа.
         /// </summary>
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM/dd/yyyy}")]
         public DateTime OrderDate { get; set; }
 
         /// <summary>

@@ -113,7 +113,8 @@ namespace OnlineGameShopApi.SerializationModels
                 GameId = (Guid)order.GameId,
                 UserId = (Guid)order.UserId,
                 Game = gameData,
-                User = userData
+                User = userData,
+                OrderDate = order.OrderDate,
             };
 
             return orderDataResponse;
