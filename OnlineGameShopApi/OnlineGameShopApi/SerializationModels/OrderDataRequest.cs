@@ -6,11 +6,6 @@
     public class OrderDataRequest
     {
         /// <summary>
-        /// Id.
-        /// </summary>
-        public Guid Id { get; set; }
-
-        /// <summary>
         /// Время заказа.
         /// </summary>
         public DateTime OrderDate { get; set; }

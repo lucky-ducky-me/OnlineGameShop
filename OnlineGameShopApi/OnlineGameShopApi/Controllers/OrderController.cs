@@ -117,12 +117,6 @@ namespace OnlineGameShopApi.Controllers
             }
         }
 
-        [HttpPut("orders")]
-        public ActionResult UpdateOrder([FromBody] OrderDataRequest orderData)
-        {
-            return Ok();
-        }
-
         /// <summary>
         /// Удаление заказа.
         /// </summary>

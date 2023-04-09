@@ -412,10 +412,5 @@ namespace DataBaseProvider
 
             _dbContext.SaveChanges();
         }
-
-        public void UpdateOrder(Order order)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -141,7 +141,5 @@ namespace DataBaseProvider
         /// </summary>
         /// <param name="user">Пользователь.</param>
         public void UpdateUser(User user);
-
-        public void UpdateOrder(Order order);
     }
 }
