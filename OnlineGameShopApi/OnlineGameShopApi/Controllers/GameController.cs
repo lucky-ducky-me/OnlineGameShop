@@ -40,7 +40,7 @@ namespace OnlineGameShopApi.Controllers
             {
                 return StatusCode(200, _onlineGameShopProvider.GetAllGames()
                     .Select(game => {
-                        game.Genre = _onlineGameShopProvider.GetGenre(game.Id);
+                        game.Genre = _onlineGameShopProvider.GetGenre((Guid)game.GenreId);
                         return Transform.TransformToGameResponse(game);
                         }).ToArray());
             }
@@ -93,7 +93,7 @@ namespace OnlineGameShopApi.Controllers
 
                 var uri = $"http://http://localhost:5142/api/games/{game.Id}";
 
-                return Created(uri, Transform.TransformToGameResponse(game, _onlineGameShopProvider.GetGenre((Guid)game.GenreId)));
+                return Created(uri, Transform.TransformToGameResponse(game));
                
             }
             catch (Exception ex)
@@ -149,41 +149,5 @@ namespace OnlineGameShopApi.Controllers
             }
             
         }
-
-        /// <summary>
-        /// Получение жанров игр.
-        /// </summary>
-        /// <returns>Коллекция жанров.</returns>
-        [HttpGet("genres")]
-        public ActionResult<IEnumerable<GenreDataResponse>> GetGenres()
-        {
-            try
-            {
-                return StatusCode(200, _onlineGameShopProvider.GetAllGenres()
-                    .Select(genre => Transform.TransformToGenreResponse(genre)).ToArray());
-            }
-            catch (Exception ex) 
-            {
-                return NotFound(ex.Message);
-            }
-        }
-
-        /// <summary>
-        /// Получение жанра по Id.
-        /// </summary>
-        /// <param name="id">Id.</param>
-        /// <returns>Жанр.</returns>
-        [HttpGet("genres/{id}")]
-        public ActionResult<GenreDataResponse> GetGenre(Guid id)
-        {
-            try
-            {
-                return StatusCode(200, Transform.TransformToGenreResponse(_onlineGameShopProvider.GetGenre(id)));
-            }
-            catch (Exception ex)
-            {
-                return NotFound(ex.Message);
-            }
-        } 
     }
 }
